@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: Cleaned order records used as the base for analytical marts.
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'cancelled', 'returned']
+
+  - name: fct_orders
+    description: BI-ready order fact table.
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
