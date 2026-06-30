@@ -1,0 +1,13 @@
+order_id,customer_id,order_date,shipped_at,delivered_at,status,channel,region,payment_method,total_amount,discount_amount,freight_amount,source_loaded_at
+O-1001,C-001,2025-01-03,2025-01-04,2025-01-07,delivered,web,west,card,120.00,10.00,8.50,2025-01-08
+O-1002,C-002,2025-01-05,2025-01-07,2025-01-10,delivered,marketplace,northeast,paypal,76.40,0.00,6.25,2025-01-11
+O-1003,C-001,2025-01-21,2025-01-22,2025-01-24,returned,web,west,card,54.20,5.00,5.75,2025-01-25
+O-1004,C-003,2025-02-02,2025-02-04,2025-02-08,delivered,inside_sales,south,invoice,310.00,25.00,18.00,2025-02-09
+O-1005,C-004,2025-02-10,,,cancelled,web,midwest,card,89.99,0.00,0.00,2025-02-11
+O-1006,C-002,2025-02-18,2025-02-20,2025-02-24,delivered,marketplace,northeast,paypal,143.50,15.00,9.00,2025-02-25
+O-1007,C-005,2025-03-03,2025-03-05,,shipped,web,west,card,67.75,0.00,7.20,2025-03-06
+O-1008,C-003,2025-03-14,2025-03-15,2025-03-17,delivered,inside_sales,south,invoice,225.00,0.00,16.00,2025-03-18
+O-1009,C-006,2025-03-27,,,placed,web,southeast,card,44.00,0.00,4.50,2025-03-28
+O-1010,C-001,2025-04-15,2025-04-16,2025-04-19,delivered,web,west,card,199.00,20.00,12.25,2025-04-20
+O-1011,C-004,2025-04-30,2025-05-02,2025-05-06,delivered,partner,midwest,card,132.80,10.00,8.00,2025-05-07
+O-1012,C-005,2025-05-20,2025-05-22,2025-05-25,delivered,web,west,card,91.25,0.00,7.50,2025-05-26

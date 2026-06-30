@@ -1,25 +1,109 @@
 version: 2
 
-models:
-  - name: stg_orders
-    description: Cleaned order records used as the base for analytical marts.
+seeds:
+  - name: raw_orders
+    description: Synthetic order lifecycle source data used to exercise dbt modeling, data quality, and BI mart design.
     columns:
       - name: order_id
+        description: Synthetic order identifier.
         tests:
           - not_null
           - unique
       - name: customer_id
+        description: Synthetic customer identifier.
         tests:
           - not_null
       - name: status
+        description: Raw order lifecycle status before staging normalization.
         tests:
-          - accepted_values:
-              values: ['placed', 'shipped', 'cancelled', 'returned']
+          - not_null
+      - name: total_amount
+        description: Gross order amount before discounts.
+        tests:
+          - not_null
 
-  - name: fct_orders
-    description: BI-ready order fact table.
+models:
+  - name: stg_orders
+    description: Cleaned and typed order records with normalized lifecycle statuses and reusable reporting flags.
     columns:
       - name: order_id
+        description: Unique order identifier after source cleanup.
         tests:
           - not_null
           - unique
+      - name: customer_id
+        description: Customer identifier used for lifecycle and retention modeling.
+        tests:
+          - not_null
+      - name: order_date
+        description: Date the order was placed.
+        tests:
+          - not_null
+      - name: status
+        description: Normalized order status.
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'delivered', 'cancelled', 'returned', 'unknown']
+      - name: net_order_amount
+        description: Gross order amount less discount amount.
+        tests:
+          - not_null
+
+  - name: int_customer_orders
+    description: Order-level customer lifecycle model with window-function sequence, recency, and revenue-to-date metrics.
+    columns:
+      - name: order_id
+        description: Unique order identifier carried from staging.
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('stg_orders')
+              field: order_id
+      - name: customer_order_number
+        description: Sequence number of the order within the customer history.
+        tests:
+          - not_null
+      - name: customer_order_stage
+        description: Lifecycle stage for the customer at the order date.
+        tests:
+          - accepted_values:
+              values: ['new', 'returning', 'reactivated']
+      - name: customer_lifetime_revenue_to_date
+        description: Running recognized revenue for the customer through the current order.
+        tests:
+          - not_null
+
+  - name: fct_orders
+    description: BI-ready order fact table for dashboarding order lifecycle, recognized revenue, exceptions, and customer recency.
+    columns:
+      - name: order_id
+        description: Unique order grain for the fact table.
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('int_customer_orders')
+              field: order_id
+      - name: customer_id
+        description: Customer identifier for segmentation and retention analysis.
+        tests:
+          - not_null
+      - name: status
+        description: Normalized order lifecycle status.
+        tests:
+          - accepted_values:
+              values: ['placed', 'shipped', 'delivered', 'cancelled', 'returned', 'unknown']
+      - name: recognized_revenue_amount
+        description: Net order amount recognized for shipped or delivered orders; zero for open, cancelled, or returned orders.
+        tests:
+          - not_null
+      - name: exception_order_count
+        description: Countable flag for cancelled and returned orders.
+        tests:
+          - not_null
+      - name: customer_order_stage
+        description: Customer lifecycle stage at the time of the order.
+        tests:
+          - accepted_values:
+              values: ['new', 'returning', 'reactivated']
