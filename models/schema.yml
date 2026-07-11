@@ -2,24 +2,152 @@ version: 2
 
 models:
   - name: stg_orders
-    description: Cleaned order records used as the base for analytical marts.
+    description: Cleaned order lines at one row per order_line_id.
     columns:
+      - name: order_line_id
+        tests: [not_null, unique]
       - name: order_id
-        tests:
-          - not_null
-          - unique
+        tests: [not_null]
       - name: customer_id
         tests:
           - not_null
-      - name: status
-        tests:
-          - accepted_values:
-              values: ['placed', 'shipped', 'cancelled', 'returned']
-
-  - name: fct_orders
-    description: BI-ready order fact table.
-    columns:
-      - name: order_id
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+      - name: sku
         tests:
           - not_null
-          - unique
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: sku
+      - name: line_fill_rate
+        tests: [not_null]
+
+  - name: stg_customers
+    description: Customer master at one row per customer.
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: customer_segment
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Enterprise', 'Mid-Market', 'SMB']
+      - name: region
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['Central', 'North', 'South', 'West']
+
+  - name: stg_products
+    description: Product master at one row per SKU.
+    columns:
+      - name: sku
+        tests: [not_null, unique]
+      - name: supplier_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('stg_suppliers')
+                field: supplier_id
+
+  - name: stg_shipments
+    description: Shipment table at one row per order.
+    columns:
+      - name: shipment_id
+        tests: [not_null, unique]
+      - name: order_id
+        tests: [not_null, unique]
+
+  - name: int_order_fulfillment
+    description: Order-grain operational model joining ERP order lines and TMS shipments.
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: unit_fill_rate
+        tests: [not_null]
+      - name: is_otif
+        tests: [not_null]
+
+  - name: dim_customers
+    description: Customer dimension.
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+
+  - name: dim_products
+    description: Product dimension enriched with supplier attributes.
+    columns:
+      - name: sku
+        tests: [not_null, unique]
+
+  - name: dim_date
+    description: Calendar date dimension covering all order and promise dates.
+    columns:
+      - name: date_day
+        tests: [not_null, unique]
+
+  - name: fct_order_lines
+    description: Order-line fact table. Grain is one row per order line.
+    columns:
+      - name: order_line_id
+        tests: [not_null, unique]
+      - name: order_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('fct_orders')
+                field: order_id
+
+  - name: fct_orders
+    description: Order fact table. Grain is one row per order.
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+      - name: order_date
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_date')
+                field: date_day
+
+  - name: mart_supply_chain_kpis
+    description: Daily warehouse-level service and cost KPIs for BI consumption.
+    columns:
+      - name: order_date
+        tests: [not_null]
+      - name: warehouse
+        tests: [not_null]
+      - name: unit_fill_rate
+        tests: [not_null]
+      - name: otif_rate
+        tests: [not_null]
+
+  - name: mart_inventory_risk
+    description: Inventory risk classification at snapshot, warehouse, and SKU grain.
+    columns:
+      - name: inventory_risk_status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['No demand', 'Stockout', 'Critical', 'Watch', 'Healthy']
+
+  - name: mart_forecast_accuracy
+    description: Forecast accuracy at month, warehouse, and SKU grain.
+    columns:
+      - name: forecast_accuracy
+        tests: [not_null]
+
+  - name: mart_customer_value
+    description: Customer-level value and service metrics for segmentation.
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]

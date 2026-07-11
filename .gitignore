@@ -1,0 +1,9 @@
+target/
+dbt_packages/
+logs/
+analytics.duckdb
+.venv/
+.venv2/
+__pycache__/
+.user.yml
+seeds/*.csv

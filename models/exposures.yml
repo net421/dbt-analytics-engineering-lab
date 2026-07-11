@@ -1,0 +1,28 @@
+version: 2
+
+exposures:
+  - name: supply_chain_control_tower
+    label: Supply Chain Control Tower
+    type: dashboard
+    maturity: medium
+    url: https://github.com/net421/tableau-bi-dashboard-lab
+    description: Executive and operational dashboard consuming validated supply chain marts.
+    depends_on:
+      - ref('mart_supply_chain_kpis')
+      - ref('mart_inventory_risk')
+      - ref('mart_forecast_accuracy')
+    owner:
+      name: net421
+      email: portfolio-owner@example.invalid
+
+  - name: customer_value_dashboard
+    label: Customer Value Dashboard
+    type: dashboard
+    maturity: low
+    url: https://github.com/net421/revenue-growth-analytics-engineering
+    description: Customer value and service segmentation based on the customer mart.
+    depends_on:
+      - ref('mart_customer_value')
+    owner:
+      name: net421
+      email: portfolio-owner@example.invalid
