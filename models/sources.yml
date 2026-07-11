@@ -1,0 +1,74 @@
+version: 2
+
+sources:
+  - name: erp
+    description: Synthetic ERP-style order-line data loaded as a dbt seed.
+    schema: main
+    tables:
+      - name: raw_orders
+        description: One row per order line.
+        columns:
+          - name: order_line_id
+            tests: [not_null, unique]
+          - name: order_id
+            tests: [not_null]
+          - name: customer_id
+            tests: [not_null]
+          - name: units_ordered
+            tests: [not_null]
+          - name: revenue
+            tests: [not_null]
+
+  - name: tms
+    description: Synthetic TMS shipment records.
+    schema: main
+    tables:
+      - name: raw_shipments
+        description: One shipment record per order.
+        columns:
+          - name: shipment_id
+            tests: [not_null, unique]
+          - name: order_id
+            tests: [not_null, unique]
+
+  - name: crm
+    description: Synthetic customer master data.
+    schema: main
+    tables:
+      - name: raw_customers
+        columns:
+          - name: customer_id
+            tests: [not_null, unique]
+
+  - name: product_master
+    description: Product and supplier master data.
+    schema: main
+    tables:
+      - name: raw_products
+        columns:
+          - name: sku
+            tests: [not_null, unique]
+      - name: raw_suppliers
+        columns:
+          - name: supplier_id
+            tests: [not_null, unique]
+
+  - name: wms
+    description: Warehouse inventory snapshots and activity.
+    schema: main
+    tables:
+      - name: raw_inventory
+        columns:
+          - name: snapshot_date
+            tests: [not_null]
+          - name: warehouse
+            tests: [not_null]
+          - name: sku
+            tests: [not_null]
+      - name: raw_warehouse_activity
+
+  - name: planning
+    description: Monthly demand forecast and actual units.
+    schema: main
+    tables:
+      - name: raw_demand_forecasts

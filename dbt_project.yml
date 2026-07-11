@@ -6,14 +6,32 @@ profile: dbt_analytics_engineering_lab
 
 model-paths: ["models"]
 seed-paths: ["seeds"]
+snapshot-paths: ["snapshots"]
 test-paths: ["tests"]
 macro-paths: ["macros"]
+analysis-paths: ["analyses"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages", "logs", "analytics.duckdb"]
 
 models:
   dbt_analytics_engineering_lab:
+    +persist_docs:
+      relation: true
+      columns: true
     staging:
       +materialized: view
+      +tags: ["staging"]
     intermediate:
       +materialized: view
+      +tags: ["intermediate"]
     marts:
       +materialized: table
+      +tags: ["marts"]
+
+seeds:
+  dbt_analytics_engineering_lab:
+    +quote_columns: false
+
+snapshots:
+  dbt_analytics_engineering_lab:
+    +target_schema: snapshots

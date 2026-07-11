@@ -1,12 +1,13 @@
 # AI-Augmented Workflow
 
-This project was developed as a human-validated AI-assisted portfolio lab. AI may be used to accelerate code generation, SQL logic, documentation, dashboard specifications and validation logic. The analytical framing, KPI definitions, assumptions, validation criteria and final review remain human-directed.
+AI accelerated project scaffolding, SQL generation, documentation, and test design. Human review controlled model grain, KPI definitions, source-to-mart reconciliation, claim boundaries, and final acceptance.
 
-## Review Standard
+## Human validation
 
-1. Define the business problem.
-2. Structure analytical logic and KPIs.
-3. Generate or refine technical artifacts.
-4. Validate outputs against expected business logic.
-5. Correct inconsistencies.
-6. Package the result as reproducible, recruiter-facing evidence.
+1. Verified all source keys and relationships.
+2. Corrected the original missing source dependency and lineage mismatch.
+3. Distinguished unit fill rate, complete-order rate, on-time delivery, and OTIF.
+4. Added lifecycle, financial, and customer reconciliation tests.
+5. Required real `dbt seed`, snapshot, build, and docs execution in CI.
+
+This is a local DuckDB portfolio implementation, not a production dbt deployment claim.
