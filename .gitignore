@@ -2,6 +2,7 @@ target/
 dbt_packages/
 logs/
 analytics.duckdb
+analytics.duckdb.wal
 .venv/
 .venv2/
 __pycache__/
