@@ -22,6 +22,13 @@ jobs:
         run: python -m pip install --disable-pip-version-check -r requirements.txt
       - name: Verify project and regenerate evidence
         run: make verify
+      - name: Check committed evidence is current
+        run: >-
+          git diff --exit-code --
+          docs/generated_lineage.md
+          validation/dbt_validation_summary.md
+          validation/manager_evidence.json
+          validation/portfolio_kpi_summary.csv
       - name: Upload dbt evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

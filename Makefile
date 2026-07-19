@@ -27,8 +27,8 @@ docs:
 evidence:
 	python scripts/export_validation_evidence.py
 
-verify: data debug seed snapshot build docs evidence
+verify: data debug seed snapshot build docs test evidence
 
 clean:
 	dbt clean --profiles-dir .
-	rm -f analytics.duckdb seeds/*.csv
+	rm -f analytics.duckdb analytics.duckdb.wal seeds/*.csv

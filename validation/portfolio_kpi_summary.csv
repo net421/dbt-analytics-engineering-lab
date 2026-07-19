@@ -1,0 +1,2 @@
+order_count,units_shipped,units_ordered,unit_fill_rate_pct,average_order_fill_rate_pct,complete_order_pct,on_time_pct,otif_pct,modeled_revenue,logistics_cost
+120,2860,2908,98.35,98.13,80.00,36.67,29.17,271098.00,13726.57

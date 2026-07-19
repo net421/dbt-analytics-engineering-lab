@@ -1,0 +1,90 @@
+{
+  "change_request": "https://github.com/net421/dbt-analytics-engineering-lab/issues/3",
+  "evidence_sources": [
+    "target/manifest.json",
+    "target/run_results.json from the final dbt test",
+    "analytics.duckdb"
+  ],
+  "kpis": {
+    "average_order_fill_rate_pct": 98.13,
+    "complete_order_pct": 80.0,
+    "logistics_cost": 13726.57,
+    "modeled_revenue": 271098.0,
+    "on_time_pct": 36.67,
+    "order_count": 120,
+    "otif_pct": 29.17,
+    "unit_fill_rate_pct": 98.35,
+    "units_ordered": 2908,
+    "units_shipped": 2860
+  },
+  "model_row_counts": {
+    "dim_customers": 30,
+    "dim_date": 333,
+    "dim_products": 18,
+    "fct_order_lines": 240,
+    "fct_orders": 120,
+    "int_customer_orders": 30,
+    "int_order_fulfillment": 120,
+    "int_order_lines_enriched": 240,
+    "mart_customer_value": 30,
+    "mart_forecast_accuracy": 324,
+    "mart_inventory_risk": 324,
+    "mart_supply_chain_kpis": 120,
+    "stg_customers": 30,
+    "stg_demand_forecasts": 324,
+    "stg_inventory": 324,
+    "stg_orders": 240,
+    "stg_products": 18,
+    "stg_shipments": 120,
+    "stg_suppliers": 6,
+    "stg_warehouse_activity": 18
+  },
+  "project": {
+    "adapter": "duckdb",
+    "dbt_version": "1.11.12",
+    "exposures": 2,
+    "intermediate_models": 3,
+    "lineage_edges": 29,
+    "lineage_nodes": 30,
+    "mart_models": 9,
+    "models": 20,
+    "seeds": 8,
+    "snapshots": 1,
+    "sources": 8,
+    "staging_models": 8,
+    "table_models": 9,
+    "view_models": 11
+  },
+  "reconciliations": {
+    "unit_fill_rate": {
+      "fct_orders": {
+        "order_count": 120,
+        "units_ordered": 2908,
+        "units_shipped": 2860
+      },
+      "formula": "sum(units_shipped) / sum(units_ordered)",
+      "mart_supply_chain_kpis": {
+        "order_count": 120,
+        "units_ordered": 2908,
+        "units_shipped": 2860
+      },
+      "status": "pass",
+      "unit_fill_rate_pct": 98.35
+    }
+  },
+  "scope": {
+    "data": "deterministic synthetic scenario",
+    "deployed_dashboards": false,
+    "production_deployment": false,
+    "warehouse": "local DuckDB"
+  },
+  "tests": {
+    "failed": 0,
+    "generic": 63,
+    "passed": 71,
+    "singular": 8,
+    "skipped": 0,
+    "total": 71,
+    "warned": 0
+  }
+}
